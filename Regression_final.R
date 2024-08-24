@@ -4,7 +4,7 @@ library(tidyverse)
 library(caret)
 
 #Colombia
-Colombia<-read_excel("/Users/kimhyunji/Desktop/Data Mining and Analytics/Group Project/Colombia_final.xlsx")
+Colombia<-read_excel(file_path)
 Colombia
 
 set.seed(123)
@@ -44,7 +44,7 @@ RMSE_R2_table
 
 
 #Ecuador
-Ecuador<-read_excel("/Users/kimhyunji/Desktop/Data Mining and Analytics/Group Project/Ecuador_final.xlsx")
+Ecuador<-read_excel(file_path)
 Ecuador
 
 set.seed(123)
