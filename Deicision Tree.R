@@ -1,6 +1,6 @@
 library(dplyr)
 library(rpart)
-data<-read.csv('/Users/kimhyunji/Downloads/classification_data.csv')
+data<-read.csv(file_path)
 data
 
 data_1<-data[,-1]
