@@ -1,20 +1,18 @@
-library(dplyr) #for manipulation of data.
-library(tidytext) #for text mining functionality.
-library(textdata) #to allow download of sentiment lexicons.
-library(tm) #for more text mining funcitonality.
-library(stringr) #simplifies the manipulation of character strings in R.
-library(wordcloud) #for drawing word clouds.
-library(tidyverse) #allows us to use ggplot and other tidy functions.
-
+library(dplyr) 
+library(tidytext)
+library(textdata) 
+library(tm) 
+library(stringr) 
+library(wordcloud) 
+library(tidyverse) 
 library(readr)
 
 
-data<-read.csv('/Users/kimhyunji/Downloads/journal_data (1).csv')
+data<-read.csv(file_path)
 data <- distinct(data)
 data$doc_number <- seq.int(1, nrow(data))
 names(data)
 
-#remove the duplication
 data <- distinct(data)
 summary(data)  #no duplication
 
@@ -73,8 +71,6 @@ slice_head(data_hs %>%
 #tf-idf example data_hs
 
 library(tidytext)
-
-# Calculate word counts per document
 word_counts <- data_hs %>%
   count(journal, word, sort = TRUE)
 
@@ -86,7 +82,6 @@ tf_idf <- word_counts %>%
   bind_tf_idf(word, journal, n) %>%
   arrange(desc(tf_idf))
 
-# View top 10 terms
 tf_idf_top10 <- slice_head(tf_idf, n = 10)
 tf_idf_top10
 
