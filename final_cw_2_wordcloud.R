@@ -1,10 +1,10 @@
-library(dplyr) #for manipulation of data.
-library(tidytext) #for text mining functionality.
-library(textdata) #to allow download of sentiment lexicons.
-library(tm) #for more text mining funcitonality.
-library(stringr) #simplifies the manipulation of character strings in R.
-library(wordcloud) #for drawing word clouds.
-library(tidyverse) #allows us to use ggplot and other tidy functions.
+library(dplyr)
+library(tidytext)
+library(textdata)
+library(tm) 
+library(stringr) 
+library(wordcloud)
+library(tidyverse) 
 library('topicmodels')
 library(readr)
 library(SnowballC)
@@ -13,10 +13,8 @@ library(tm)
 library(slam)
 
 
-data <- read_csv("/Users/kimhyunji/Downloads/journal_data (1).csv")
+data <- read_csv(file_path)
 summary(data)
-
-#remove the duplication
 data <- distinct(data)
 summary(data)  #no duplication
 
@@ -48,9 +46,6 @@ data_js <- tidy_data2[tidy_data2$journal=="Journal of Simulation",]
 data_jors <- tidy_data2[tidy_data2$journal=="Journal of the Operational Research Society",]
 
 
-
-#find the common words
-
 #hs
 data("stop_words")
 
@@ -74,7 +69,6 @@ ud_model <- udpipe_load_model(ud_model$file_model)
 annotated <- udpipe_annotate(ud_model, x = data_hs$word)
 annotated <- as.data.frame(annotated)
 
-# Extract lemmatized words
 data_hs$word_lemma <- annotated$lemma[match(data_hs$word, annotated$token)]
 data_hs <- na.omit(data_hs)
 
@@ -99,27 +93,22 @@ ggplot(data=top_10_imdb_data, aes(x=word_lemma, y=n)) +
 
 #tf-idf
 
-# 데이터 프레임 'data_hs'에 문서 식별자(doc_id) 추가
 data_hs <- data_hs %>%
   mutate(doc_id = row_number())
 
-# TF-IDF 계산 전에 TF가 1 초과인 단어들만 선택
 tf_filtered <- tf %>%
   filter(tf > 1)
 
-# TF (단어 빈도) 계산
 tf <- data_hs %>%
   count(doc_id, word_lemma) %>%
   rename(tf = n)
 
-# IDF (역문서 빈도) 계산
 total_docs <- n_distinct(data_hs$doc_id)
 idf <- data_hs %>%
   group_by(word_lemma) %>%
   summarise(n_docs = n_distinct(doc_id)) %>%
   mutate(idf = log(total_docs / n_docs))
 
-# TF와 IDF를 결합하여 TF-IDF 계산
 tf_idf <- tf %>%
   inner_join(idf, by = "word_lemma") %>%
   mutate(tf_idf = tf * idf)
@@ -129,14 +118,10 @@ head(tf_idf)
 top_tf_idf <- tf_idf %>%
   arrange(desc(tf_idf)) %>%
   slice_head(n = 10)
-
-# 결과 출력
 print(top_tf_idf)
 
 tf_idf_below_9_76 <- tf_idf %>%
   filter(tf_idf < 9.76)
-
-# 결과 출력
 print(tf_idf_below_9_76)
 
 
@@ -173,13 +158,8 @@ data_js <- na.omit(data_js)
 data_js <- data_js %>% 
   mutate(doc_id = row_number())
 
-# Now count the frequency of each lemmatized word in each document
 js_words <- data_js %>%
   count(doc_id, word_lemma, sort = TRUE)
-
-# Following this, you can proceed with TF-IDF calculation
-# ...
-
 print(slice_head(data_js %>%
                    count(word_lemma) %>%
                    arrange(desc(n)),n=30),n=30)
@@ -248,8 +228,7 @@ jors_words <- data_jors %>%
   count(doc_id, word_lemma, sort = TRUE)
 data_jors <- na.omit(data_jors)
 
-# Following this, you can proceed with TF-IDF calculation
-# ...
+
 
 print(slice_head(data_jors %>%
                    count(word_lemma) %>%
@@ -322,8 +301,6 @@ words_00 <- data_00 %>%
   count(doc_id, word_lemma, sort = TRUE)
 data_00 <- na.omit(data_00)
 
-# Following this, you can proceed with TF-IDF calculation
-# ...
 
 print(slice_head(data_00 %>%
                    count(word_lemma) %>%
