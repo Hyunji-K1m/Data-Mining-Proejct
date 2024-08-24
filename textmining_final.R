@@ -1,10 +1,10 @@
-library(dplyr) #for manipulation of data.
-library(tidytext) #for text mining functionality.
-library(textdata) #to allow download of sentiment lexicons.
-library(tm) #for more text mining funcitonality.
-library(stringr) #simplifies the manipulation of character strings in R.
-library(wordcloud) #for drawing word clouds.
-library(tidyverse) #allows us to use ggplot and other tidy functions.
+library(dplyr)
+library(tidytext) 
+library(textdata)
+library(tm) 
+library(stringr) 
+library(wordcloud) 
+library(tidyverse)
 library('topicmodels')
 library(readr)
 library(SnowballC)
@@ -12,10 +12,8 @@ library(udpipe)
 library(tm)
 library(slam)
 
-data <- read_csv("/Users/kimhyunji/Downloads/journal_data (1).csv")
+data <- read_csv(file_path)
 summary(data)
-
-#remove the duplication
 data <- distinct(data)
 summary(data)  #no duplication
 
